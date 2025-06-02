@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <t t-name="runbot.docker_base">
+    <t t-set="default"
+      t-value="{from': 'ubuntu:jammy','odoo_branch': '17.0','chrome_source': 'google','chrome_version': '90.0.4430.93-1','node_packages': 'rtlcss es-check eslint','node_version': '15','psql_version': '12','wkhtml_url': 'https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb','chrome': true,'phantom': false,'do_requirements': true,'python_version': 'python3','deb_packages_python': 'git python3 python3-dbfread python3-dev python3-pip python3-setuptools python3-wheel python3-markdown python3-mock python3-cffi python3-websocket libpq-dev','deb_package_default': 'npm apt-transport-https build-essential ca-certificates curl ffmpeg file fonts-freefont-ttf fonts-noto-cjk gawk gnupg gsfonts libldap2-dev libjpeg62-dev libsasl2-dev libxslt1-dev lsb-release node-less ocrmypdf sed sudo unzip xfonts-75dpi zip zlib1g-dev','additional_pip': 'google_auth xmlsec pyjwt zeep ebaysdk==2.1.5 pdf417gen==0.7.1','runbot_pip': 'coverage==4.5.4 astroid==2.4.2 pylint==2.5.0 flamegraph'}" />
+
+    <t t-set="values" t-value="default" />
+
+    <t t-set="dummy" t-value="values.update(custom_values)" t-if="custom_values" />
+
+    <t t-call="runbot.docker_from" />
+
+    <t t-call="runbot.docker_install_debs">
+      <t t-set="deb_packages" t-value="values['deb_package_default']" />
+    </t>
+
+    <t t-call="runbot.docker_install_debs">
+      <t t-set="deb_packages" t-value="values['deb_packages_python']" />
+    </t>
+
+    <t t-out="0" /><!-- custom content from caller t-call -->
+
+    <t t-call="runbot.docker_install_wkhtml" />
+    <!-- <t t-call="runbot.docker_install_nodejs"/> -->
+    <t t-call="runbot.docker_install_node_packages" />
+    <t t-call="runbot.docker_install_flamegraph" />
+    <!-- <t t-call="runbot.docker_install_odoo_debs"/> -->
+    <t t-call="runbot.docker_install_runbot_python_requirements" />
+    <t t-call="runbot.docker_install_psql" />
+
+    <!-- 
+    <t t-if="values['chrome']" t-call="runbot.docker_install_chrome"/>
+    -->
+
+    <t t-if="values['phantom']" t-call="runbot.docker_install_phantomjs" />
+
+    <t t-if="values['do_requirements']" t-call="runbot.docker_install_odoo_python_requirements" />
+  </t>
+  
+<t t-name="runbot.docker_install_debs">
+    RUN set -x ; \
+    apt-get update \
+    &amp;&amp; DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends <t t-esc="deb_packages or values['deb_packages']"/> 
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+    </t>
+
+<t t-name="runbot.docker_install_nodejs">
+      <t t-set="node_version" t-value="node_version or '15'"/>
+# Install nodejs
+RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+    &amp;&amp; echo ""deb https://deb.nodesource.com/node_<t t-esc="values['node_version']"/>.x `lsb_release -c -s` main"" &gt; /etc/apt/sources.list.d/nodesource.list \
+    &amp;&amp; apt-get update \
+    &amp;&amp; apt-get install -y nodejs
+    </t>
+
+<t t-name="runbot.docker_install_node_packages">
+    RUN npm install -g <t t-esc="values['node_packages']"/>
+    </t>
+
+<t t-name="runbot.docker_install_flamegraph">
+    ADD https://raw.githubusercontent.com/brendangregg/FlameGraph/master/flamegraph.pl /usr/local/bin/flamegraph.pl
+    RUN chmod +rx /usr/local/bin/flamegraph.pl
+  </t>
+
+<t t-name="runbot.docker_install_odoo_python_requirements">
+ADD https://raw.githubusercontent.com/odoo/odoo/<t t-esc="values['odoo_branch']"/>/requirements.txt /root/requirements.txt
+RUN <t t-esc="values['python_version']"/> -m pip install --no-cache-dir setuptools wheel &amp;&amp; \
+    <t t-esc="values['python_version']"/> -m pip install --no-cache-dir -r /root/requirements.txt &amp;&amp; \
+    <t t-esc="values['python_version']"/> -m pip install --no-cache-dir <t t-esc="values['additional_pip']"/>
+    </t>
+
+<t t-name="runbot.docker_install_psql">
+      <t t-set="psql_version" t-value="psql_version or False"/>
+RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    &amp;&amp; echo ""deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -s -c`-pgdg main"" &gt; /etc/apt/sources.list.d/pgclient.list \
+    &amp;&amp; apt-get update \
+    &amp;&amp; DEBIAN_FRONTEND=noninteractive apt-get install -y postgresql-client<t t-if="values['psql_version']">-</t><t t-esc="values['psql_version']"/> \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+    </t>
+
+
+</odoo>

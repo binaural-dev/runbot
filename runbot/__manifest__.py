@@ -19,6 +19,7 @@
         'data/runbot_error_regex_data.xml',
         'data/website_data.xml',
         'data/runbot_config_parameters.xml'
+        "data/dockerfile_binaural.xml",
 
         'security/runbot_security.xml',
         'security/ir.model.access.csv',
