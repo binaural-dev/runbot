@@ -315,3 +315,16 @@ Or by providing a plain Dockerfile in the template.
 Once the Dockerfile is created and the `to_build` field is checked, the Dockerfile will be built (pay attention that no other operations will occur during the build).
 
 A version or a bundle can be assigned a specific Dockerfile.
+
+## Docker Compose
+
+For a quick local setup the project can be started using Docker.  After
+building the image, simply run:
+
+```bash
+docker compose up
+```
+
+This command will start PostgreSQL together with the Runbot, builder and
+leader services.  Once the initialization is complete the Runbot interface
+will be reachable on [http://localhost:8069](http://localhost:8069).
