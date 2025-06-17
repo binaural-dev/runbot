@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-exec python3 /opt/odoo/runbot/runbot_builder/leader.py \
+exec python3 /opt/odoo/runbot_builder/leader.py \
     --odoo-path=/usr/lib/python3/dist-packages/odoo \
     --addons-path=${ADDONS_PATH} \
     -d ${DB_NAME:-runbot} \

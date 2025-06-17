@@ -318,8 +318,9 @@ A version or a bundle can be assigned a specific Dockerfile.
 
 ## Docker Compose
 
-For a quick local setup the project can be started using Docker.  After
-building the image, simply run:
+For a quick local setup the project can be started using Docker.  If the
+image is not built yet, run `docker compose build` first and then start
+the services with:
 
 ```bash
 docker compose up
