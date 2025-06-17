@@ -6,11 +6,10 @@
     'author': "Odoo SA",
     'website': "http://runbot.odoo.com",
     'category': 'Website',
-    'version': '5.10',
+    'version': '5.11',
     'application': True,
     'depends': ['base', 'base_automation', 'website'],
     'data': [
-        'templates/dockerfile.xml',
         'data/dockerfile_data.xml',
         'data/build_parse.xml',
         'data/error_link.xml',
@@ -37,6 +36,7 @@
         'templates/git.xml',
         'templates/nginx.xml',
         'templates/build_error.xml',
+        'templates/batches_by_date.xml',
 
         'views/branch_views.xml',
         'views/build_error_link_views.xml',

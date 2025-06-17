@@ -143,6 +143,7 @@ class ConfigStep(models.Model):
     group_name = fields.Char('Group name', related='group.name')
     make_stats = fields.Boolean('Make stats', default=False)
     build_stat_regex_ids = fields.Many2many('runbot.build.stat.regex', string='Stats Regexes')
+    dockerfile_variant = fields.Char('Docker Variant')
     # install_odoo
     create_db = fields.Boolean('Create Db', default=True, tracking=True)  # future
     custom_db_name = fields.Char('Custom Db Name', tracking=True)  # future
@@ -407,10 +408,17 @@ class ConfigStep(models.Model):
             if smtp_host:
                 cmd += ['--smtp', smtp_host]
 
+        if "--db-template" in available_options:
+            icp = self.env['ir.config_parameter']
+            db_template = icp.get_param('runbot.runbot_db_template', default='template0')
+            cmd += ['--db-template', db_template]
+
         extra_params = self.extra_params or ''
         if extra_params:
             cmd.extend(shlex.split(extra_params))
         env_variables = self.additionnal_env.split(';') if self.additionnal_env else []
+        if config_env_variables := build.params_id.config_data.get('env_variables', False):
+            env_variables += config_env_variables.split(';')
 
         build_port = build.port
         try:
@@ -486,6 +494,11 @@ class ConfigStep(models.Model):
 
         if "--screenshots" in available_options:
             cmd.add_config_tuple('screenshots', '/data/build/tests')
+
+        if "--db-template" in available_options:
+            icp = self.env['ir.config_parameter']
+            db_template = icp.get_param('runbot.runbot_db_template', default='template0')
+            cmd.add_config_tuple('db_template', db_template)
 
         if "--screencasts" in available_options and self.env['ir.config_parameter'].sudo().get_param('runbot.enable_screencast', False):
             cmd.add_config_tuple('screencasts', '/data/build/tests')
@@ -798,6 +811,8 @@ class ConfigStep(models.Model):
         exception_env = self.env['runbot.upgrade.exception']._generate()
         if exception_env:
             env_variables.append(exception_env)
+        if config_env_variables := build.params_id.config_data.get('env_variables', False):
+            env_variables += config_env_variables.split(';')
         return dict(cmd=migrate_cmd, ro_volumes=exports, env_variables=env_variables, image_tag=target.params_id.dockerfile_id.image_tag)
 
     def _run_restore(self, build):
