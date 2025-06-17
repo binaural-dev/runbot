@@ -8,12 +8,19 @@ services:
       POSTGRES_PASSWORD: odoo
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "odoo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
   runbot:
     build: .
     command: ["/opt/odoo/scripts/runbot.sh"]
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8069:8069"
     environment:
@@ -22,12 +29,14 @@ services:
       DB_PASSWORD: odoo
       DB_NAME: runbot
       ADDONS_PATH: "/usr/lib/python3/dist-packages/odoo/addons,/opt/odoo/runbot"
+    restart: unless-stopped
 
   builder:
     build: .
     command: ["/opt/odoo/scripts/builder.sh"]
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DB_HOST: db
       DB_USER: odoo
@@ -35,12 +44,14 @@ services:
       DB_NAME: runbot
       ADDONS_PATH: "/usr/lib/python3/dist-packages/odoo/addons,/opt/odoo/runbot"
       FORCED_HOST_NAME: builder
+    restart: unless-stopped
 
   leader:
     build: .
     command: ["/opt/odoo/scripts/leader.sh"]
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DB_HOST: db
       DB_USER: odoo
@@ -48,6 +59,7 @@ services:
       DB_NAME: runbot
       ADDONS_PATH: "/usr/lib/python3/dist-packages/odoo/addons,/opt/odoo/runbot"
       FORCED_HOST_NAME: leader
+    restart: unless-stopped
 
 volumes:
   pgdata:
