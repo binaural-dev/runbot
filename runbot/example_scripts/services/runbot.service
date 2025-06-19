@@ -4,9 +4,9 @@ Description=runbot
 [Service]
 PassEnvironment=LANG
 Type=simple
-User=runbot_user
-WorkingDirectory=/home/runbot_user/odoo
-ExecStart=/home/runbot_user/bin/runbot/runbot.sh
+User=odoo
+WorkingDirectory=/home/odoo
+ExecStart=/home/odoo/custom_addons/runbot/runbot/example_scripts/runbot/runbot.sh
 Restart=on-failure
 KillMode=process
 
