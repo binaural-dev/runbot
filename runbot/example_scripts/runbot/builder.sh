@@ -10,6 +10,6 @@ LOGS_DIR="/home/odoo/custom_addons/runbot/logs"
 
 RUNBOT_REPO_DIR="/home/odoo/custom_addons/runbot"
 
-$DOMAIN="runbot2.binauraldev.com"
+DOMAIN="runbot2.binauraldev.com"
 
 exec python3 $RUNBOT_REPO_DIR/runbot_builder/builder.py --odoo-path $ODOO_DIR -d runbot --logfile $LOGS_DIR/runbot_builder.txt --forced-host-name $DOMAIN
