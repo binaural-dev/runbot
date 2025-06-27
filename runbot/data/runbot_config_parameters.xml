@@ -1,0 +1,92 @@
+<odoo>
+  <data noupdate="1">
+    <!-- Enteros -->
+    <record id="runbot_config_workers" model="ir.config_parameter">
+      <field name="key">runbot.runbot_workers</field>
+      <field name="value">4</field>
+    </record>
+    <record id="runbot_config_running_max" model="ir.config_parameter">
+      <field name="key">runbot.runbot_running_max</field>
+      <field name="value">10</field>
+    </record>
+    <record id="runbot_config_timeout" model="ir.config_parameter">
+      <field name="key">runbot.runbot_timeout</field>
+      <field name="value">3600</field>
+    </record>
+    <record id="runbot_config_starting_port" model="ir.config_parameter">
+      <field name="key">runbot.runbot_starting_port</field>
+      <field name="value">2000</field>
+    </record>
+    <record id="runbot_config_max_age" model="ir.config_parameter">
+      <field name="key">runbot.runbot_max_age</field>
+      <field name="value">30</field>
+    </record>
+    <record id="runbot_config_update_frequency" model="ir.config_parameter">
+      <field name="key">runbot.runbot_update_frequency</field>
+      <field name="value">300</field>
+    </record>
+
+    <!-- Flotantes -->
+    <record id="runbot_config_containers_memory" model="ir.config_parameter">
+      <field name="key">runbot.runbot_containers_memory</field>
+      <field name="value">4.0</field>
+    </record>
+    <record id="runbot_config_containers_cpus" model="ir.config_parameter">
+      <field name="key">runbot.runbot_containers_cpus</field>
+      <field name="value">0.0</field>
+    </record>
+
+    <!-- Booleanos -->
+    <record id="runbot_config_do_fetch" model="ir.config_parameter">
+      <field name="key">runbot.runbot_do_fetch</field>
+      <field name="value">True</field>
+    </record>
+
+    <record id="runbot_config_do_schedule" model="ir.config_parameter">
+      <field name="key">runbot.runbot_do_schedule</field>
+      <field name="value">True</field>
+    </record>
+
+    <record id="runbot_config_disable_host_on_fetch_failure" model="ir.config_parameter">
+      <field name="value">False</field>
+    </record>
+
+    <!-- Texto y Chars -->
+    <record id="runbot_config_logdb_name" model="ir.config_parameter">
+      <field name="key">runbot.logdb_name</field>
+      <field name="value">runbot_logs</field>
+    </record>
+    <record id="runbot_config_template" model="ir.config_parameter">
+      <field name="key">runbot.template</field>
+      <field name="value">template1</field>
+    </record>
+    <record id="runbot_config_message" model="ir.config_parameter">
+      <field name="key">runbot.message</field>
+      <field name="value"><![CDATA[Servicio en mantenimiento - Vuelva pronto]]></field>
+    </record>
+    <record id="runbot_config_default_odoorc" model="ir.config_parameter">
+      <field name="key">runbot.default_odoorc</field>
+      <field name="value"><![CDATA[admin_passwd = superadmin_secret
+        db_host = localhost
+        db_port = 5432]]>
+
+    </field>
+    </record>
+    <record id="runbot_config_upgrade_exception_message" model="ir.config_parameter">
+      <field name="key">runbot.upgrade_exception_message</field>
+      <field name="value"><![CDATA[Se ha detectado un problema durante la actualización]]></field>
+    </record>
+    <record id="runbot_config_is_base_regex" model="ir.config_parameter">
+      <field name="key">runbot.is_base_regex</field>
+      <field name="value">^base:.*</field>
+    </record>
+    <record id="runbot_config_forwardport_author" model="ir.config_parameter">
+      <field name="key">runbot.forwardport_author</field>
+      <field name="value">Runbot &lt;runbot@example.com&gt;</field>
+    </record>
+    <record id="runbot_config_organisation" model="ir.config_parameter">
+      <field name="key">runbot.organisation</field>
+      <field name="value">MyOrg</field>
+    </record>
+  </data>
+</odoo>

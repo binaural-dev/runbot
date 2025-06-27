@@ -19,15 +19,17 @@
     <data noupdate="1">
         <record model="ir.config_parameter" id="runbot.runbot_upgrade_exception_message">
             <field name="key">runbot.runbot_upgrade_exception_message</field>
-            <field name="value">Upgrade exception [#{exception.id}]({base_url}/web/#id={exception.id}&amp;view_type=form&amp;model=runbot.upgrade.exception) added\
-    {exception.elements}
+            <field name="value">Upgrade exception
+                [#{exception.id}]({base_url}/web/#id={exception.id}&amp;view_type=form&amp;model=runbot.upgrade.exception)
+                added\
+                {exception.elements}
             </field>
         </record>
 
         <record model="ir.config_parameter" id="runbot.runbot_default_odoorc">
             <field name="key">runbot.runbot_default_odoorc</field>
             <field name="value">[options]
-admin_passwd=running_master_password</field>
+                admin_passwd=running_master_password</field>
         </record>
 
         <record model="ir.config_parameter" id="runbot.runbot_default_logdb_name">
@@ -36,11 +38,6 @@ admin_passwd=running_master_password</field>
         </record>
 
     </data>
-
-    <record model="ir.config_parameter" id="runbot.runbot_disable_host_on_fetch_failure">
-        <field name="key">runbot.runbot_disable_host_on_fetch_failure</field>
-        <field name="value"></field>
-    </record>
 
     <record model="ir.config_parameter" id="runbot.runbot_dockerfile_public_by_default">
         <field name="key">runbot.runbot_dockerfile_public_by_default</field>
@@ -100,12 +97,12 @@ admin_passwd=running_master_password</field>
 
     <record id="ir_cron_runbot" model="ir.cron">
         <field name="name">Runbot</field>
-        <field name="active" eval="False"/>
+        <field name="active" eval="False" />
         <field name="interval_number">10</field>
         <field name="interval_type">seconds</field>
         <field name="numbercall">-1</field>
-        <field name="doall" eval="False"/>
-        <field name="model_id" ref="model_runbot_runbot"/>
+        <field name="doall" eval="False" />
+        <field name="model_id" ref="model_runbot_runbot" />
         <field name="code">model._cron()</field>
         <field name="state">code</field>
     </record>
