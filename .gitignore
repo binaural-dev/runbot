@@ -12,3 +12,4 @@ runbot/static/nginx
 runbot/static/databases
 runbot/static/docker
 runbot/static/docker-registry
+!.mergify.yml
